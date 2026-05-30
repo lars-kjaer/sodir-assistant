@@ -220,5 +220,4 @@ __marimo__/
 
 # Bronze and Silver data
 data/bronze/
-data/silver/
-sodir.db
+data/sodir.db

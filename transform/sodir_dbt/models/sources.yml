@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: main
+    tables:
+      - name: wellbore_all
+        description: "Raw wellbore data from SODIR"
+      - name: field_overview
+        description: "Raw field overview data from SODIR"
+      - name: field_status
+        description: "Raw field status history from SODIR"
+      - name: field_pdo
+        description: "Raw field PDO history from SODIR"
+      - name: field_operators
+        description: "Raw field operators history from SODIR"
+      - name: field_licencees
+        description: "Raw field licensees from SODIR"
+      - name: field_prod_sale_mth
+        description: "Raw monthly field production from SODIR"
+      - name: field_prod_sale_year
+        description: "Raw yearly field production from SODIR"
+      - name: field_reserves
+        description: "Raw field reserves from SODIR"
