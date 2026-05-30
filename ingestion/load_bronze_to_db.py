@@ -31,7 +31,7 @@ def load_csv_to_db(name, conn):
         return
     logger.info(f"Loading {name}...")
     df = pd.read_csv(filepath, low_memory=False)
-    df.to_sql(name, conn, if_exists="replace", index=False)
+    df.to_sql(f"bronze_{name}", conn, if_exists="replace", index=False)
     logger.info(f"Loaded {len(df)} rows into table '{name}'")
 
 if __name__ == "__main__":
