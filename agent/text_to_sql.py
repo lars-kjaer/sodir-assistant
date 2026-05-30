@@ -1,14 +1,14 @@
 import os
 import sqlite3
-from google import genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 DB_PATH = "data/sodir.db"
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "llama-3.3-70b-versatile"
 
 SCHEMA = """
 Table: gold_wellbore
@@ -51,6 +51,11 @@ You have access to a SQLite database with the following table:
 
 {SCHEMA}
 
+Important guidance:
+- All depth measurements are in meters. Convert feet to meters (1 foot = 0.3048 m) when the user asks in feet.
+- When filtering by company or field names, use LIKE with wildcards (e.g. drilling_operator LIKE '%Aker BP%') because exact names vary.
+- drilling_operator is the company that drilled the wellbore, which may differ from the current field operator.
+
 Rules:
 - Return ONLY the SQL query, no explanation, no markdown, no backticks
 - Use exact column and table names as listed above
@@ -58,11 +63,19 @@ Rules:
 """
 
 def generate_sql(question: str) -> str:
-    response = client.models.generate_content(
+    response = client.chat.completions.create(
         model=MODEL_NAME,
-        contents=f"{SYSTEM_PROMPT}\n\nUser question: {question}"
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": question},
+        ],
+        temperature=0,
     )
-    return response.text.strip()
+    sql = response.choices[0].message.content.strip()
+    # Strip markdown fences if the model adds them anyway
+    if sql.startswith("```"):
+        sql = sql.split("```")[1].replace("sql", "", 1).strip()
+    return sql
 
 def run_query(sql: str):
     conn = sqlite3.connect(DB_PATH)
@@ -73,6 +86,23 @@ def run_query(sql: str):
     conn.close()
     return columns, rows
 
+def format_answer(question: str, columns, rows) -> str:
+    result_text = str([dict(zip(columns, row)) for row in rows])
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[
+            {"role": "user", "content": f"""The user asked: "{question}"
+
+The query returned this result:
+{result_text}
+
+Write a clear, concise natural language answer to the user's question based on this result.
+Do not mention SQL, queries, or databases. Just answer the question directly."""},
+        ],
+        temperature=0,
+    )
+    return response.choices[0].message.content.strip()
+
 def ask(question: str):
     sql = generate_sql(question)
     print(f"\nGenerated SQL:\n{sql}\n")
@@ -80,10 +110,7 @@ def ask(question: str):
         columns, rows = run_query(sql)
         if not rows:
             return "No results found."
-        result = []
-        for row in rows:
-            result.append(dict(zip(columns, row)))
-        return result
+        return format_answer(question, columns, rows)
     except Exception as e:
         return f"Query failed: {e}\nSQL: {sql}"
 
