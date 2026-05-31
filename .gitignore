@@ -219,5 +219,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Bronze and Silver data
-data/bronze/
+data/raw/
 data/sodir.db
