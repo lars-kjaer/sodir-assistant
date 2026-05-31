@@ -1,0 +1,172 @@
+version: 2
+
+models:
+  - name: gold_wellbore
+    description: >
+      One row per wellbore on the Norwegian Continental Shelf (NCS), sourced from
+      SODIR. Includes classification, status, operator, location, depth and
+      geological attributes. Agent-facing curated table.
+    columns:
+      - name: wellbore_name
+        description: "Official wellbore name per SODIR naming convention."
+      - name: npdid_wellbore
+        description: "SODIR unique identifier for the wellbore. Primary key."
+      - name: well_name
+        description: "Official name of the parent well for the wellbore."
+      - name: drilling_operator
+        description: >
+          Company that performed the drilling operation, usually the operator
+          of the production licence. May differ from the current field operator.
+      - name: wellbore_production_licence
+        description: "Production licence the wellbore was drilled from (wellhead position)."
+      - name: wellbore_purpose
+        description: >
+          Final classification of the wellbore. Exploration values include
+          WILDCAT, APPRAISAL, WILDCAT-CCS, APPRAISAL-CCS. Development values
+          include PRODUCTION, INJECTION, OBSERVATION.
+      - name: wellbore_status
+        description: >
+          Current status. Common values: DRILLING, PRODUCING, INJECTING,
+          P&A, PLUGGED, SUSPENDED, CLOSED, JUNKED, BLOWOUT, PREDRILLED.
+      - name: wellbore_content
+        description: >
+          For exploration: discovery status (DRY, SHOWS, GAS, GAS/CONDENSATE,
+          OIL, OIL/GAS). For development: produced or injected fluid type.
+      - name: wellbore_type
+        description: "Wellbore type: EXPLORATION, DEVELOPMENT or OTHER."
+      - name: wellbore_spud_date
+        description: "Date the wellbore was spudded (drilling started)."
+      - name: wellbore_completed_date
+        description: "Date the wellbore reached total depth and was completed."
+      - name: field_name
+        description: "Name of the field the wellbore is related to."
+      - name: wellbore_drilling_permit
+        description: "Drilling permit number and version as granted by SODIR."
+      - name: wellbore_bottom_hole_temperature_degc
+        description: "Estimated temperature at total depth, in degrees Celsius. Released wells only."
+      - name: wellbore_maximum_inclination_deg
+        description: "Maximum deviation from vertical, in degrees. Released wells only."
+      - name: wellbore_kelly_bushing_elevation_meters
+        description: "Elevation of the rotary kelly bushing above mean sea level, in metres."
+      - name: wellbore_kick_off_point_meters
+        description: "Measured depth where a new wellbore is kicked off from the previous one, in metres."
+      - name: wellbore_tvd_meters
+        description: "True vertical depth from total depth to kelly bushing, in metres. Released wells only."
+      - name: wellbore_md_meters
+        description: "Total measured depth from kelly bushing to total depth, in metres."
+      - name: wellbore_water_depth_meters
+        description: "Water depth between mean sea level and sea floor, in metres."
+      - name: wellbore_oldest_penetrated_age
+        description: "Geological age of the oldest formation penetrated, e.g. LATE JURASSIC, EARLY TRIASSIC."
+      - name: wellbore_oldest_penetrated_formation
+        description: "Name of the oldest lithostratigraphic unit penetrated. Released wells only."
+      - name: wellbore_main_area
+        description: "Area of the NCS where the wellbore is located: NORTH SEA, NORWEGIAN SEA or BARENTS SEA."
+      - name: wellbore_drilling_facility
+        description: "SODIR name of the facility the wellbore was drilled from."
+      - name: wellbore_drilling_facility_category
+        description: "Whether the drilling facility was FIXED or MOVEABLE."
+      - name: wellbore_drilling_facility_type
+        description: "Kind of drilling facility, e.g. JACK-UP 3 LEGS, SEMISUB STEEL, TLP CONCRETE."
+      - name: wellbore_production_facility
+        description: "SODIR name of the production facility, for development wells."
+      - name: wellbore_multilateral_flag
+        description: "Indicator (YES/NO) whether the parent well is multilateral."
+      - name: wellbore_planned_purpose
+        description: "Pre-drill planned purpose of the wellbore."
+      - name: wellbore_planned_content
+        description: "Planned produced or injected fluid type, for development wellbores."
+      - name: wellbore_entry_year
+        description: "Year the drill bit penetrated the sea floor / earth's crust."
+      - name: wellbore_completion_year
+        description: "Year the wellbore was completed."
+      - name: wellbore_reclassified_from
+        description: "The original wellbore this one was reclassified from (exploration to development)."
+      - name: wellbore_reclassified_date
+        description: "Date the wellbore was reclassified."
+      - name: wellbore_1st_level_with_hc_formation
+        description: "Lithostratigraphic unit, 1st level, where hydrocarbons were encountered. Released wells only."
+      - name: wellbore_1st_level_with_hc_age
+        description: "Age of the lithostratigraphic unit, 1st level, where hydrocarbons were encountered."
+      - name: wellbore_2nd_level_with_hc_formation
+        description: "Lithostratigraphic unit, 2nd level, where hydrocarbons were encountered."
+      - name: wellbore_2nd_level_with_hc_age
+        description: "Age of the lithostratigraphic unit, 2nd level, where hydrocarbons were encountered."
+      - name: wellbore_3rd_level_with_hc_formation
+        description: "Lithostratigraphic unit, 3rd level, where hydrocarbons were encountered."
+      - name: wellbore_3rd_level_with_hc_age
+        description: "Age of the lithostratigraphic unit, 3rd level, where hydrocarbons were encountered."
+      - name: wellbore_drilling_days
+        description: "Number of days from wellbore entry to completion."
+      - name: wellbore_ns_utm_meters
+        description: "UTM coordinate of the wellhead, north-south, in metres."
+      - name: wellbore_ew_utm_meters
+        description: "UTM coordinate of the wellhead, east-west, in metres."
+      - name: wellbore_utm_zone
+        description: "UTM zone, e.g. 31, 32, 33, 34."
+      - name: npdid_production_licences_target
+        description: "SODIR id for the production licence of the wellbore target. May differ from the licence drilled from."
+      - name: npdid_discovery
+        description: "SODIR id for the related discovery. Foreign key to discovery."
+      - name: npdid_field
+        description: "SODIR id for the related field. Foreign key joining to field and production tables."
+      - name: npdid_drilling_facility
+        description: "SODIR id for the facility that drilled the wellbore."
+      - name: npdid_production_facility
+        description: "SODIR id for the production facility, for development wellbores."
+      - name: npdid_wellbore_reclassified_from
+        description: "SODIR id for the wellbore this one was reclassified from."
+      - name: npdid_production_licence_drilled_in
+        description: "SODIR id for the production licence the wellbore was drilled from (wellhead position)."
+      - name: wellbore_alias_name
+        description: "Alias or project name of the wellbore, not necessarily following SODIR naming convention."
+      - name: wellbore_subsea_flag
+        description: "Indicator (YES/NO) whether the well is completed on the seabed."
+      - name: wellbore_plugged_date
+        description: "Date plugging operations were finished."
+      - name: wellbore_plug_and_abandon_date
+        description: "Date P&A operations were finished. Applied once per wellhead/surface location."
+      - name: npdid_site_survey
+        description: "SODIR id for the related site survey."
+      - name: wellbore_updated_date
+        description: "Date any information about the wellbore was last updated."
+
+  - name: gold_field_sales_production_month
+    description: >
+      Monthly net sales production per field on the Norwegian Continental
+      Shelf, sourced from SODIR. One row per field per month. Volumes are
+      provided in native SODIR units (Sm3) and pre-converted to oilfield
+      units (bbl for liquids, scf for gas). Sum across months for annual totals.
+    columns:
+      - name: field_name
+        description: "Name of the producing field."
+      - name: year
+        description: "Production year."
+      - name: month
+        description: "Production month (1-12)."
+      - name: net_oil_million_sm3
+        description: "Net oil production in million standard cubic metres (Sm3)."
+      - name: net_oil_million_bbl
+        description: "Net oil production in million barrels (converted from Sm3 at 6.2898 bbl/Sm3)."
+      - name: net_gas_billion_sm3
+        description: "Net gas production in billion standard cubic metres (Sm3)."
+      - name: net_gas_billion_scf
+        description: "Net gas production in billion standard cubic feet (converted from Sm3 at 35.3147 scf/Sm3)."
+      - name: net_ngl_million_sm3
+        description: "Net NGL production in million standard cubic metres (Sm3)."
+      - name: net_ngl_million_bbl
+        description: "Net NGL production in million barrels (converted from Sm3 at 6.2898 bbl/Sm3)."
+      - name: net_condensate_million_sm3
+        description: "Net condensate production in million standard cubic metres (Sm3)."
+      - name: net_condensate_million_bbl
+        description: "Net condensate production in million barrels (converted from Sm3 at 6.2898 bbl/Sm3)."
+      - name: net_oil_equivalent_million_sm3
+        description: "Net oil equivalent (boe) in million standard cubic metres (Sm3)."
+      - name: net_oil_equivalent_million_bbl
+        description: "Net oil equivalent (boe) in million barrels (converted from Sm3 at 6.2898 bbl/Sm3)."
+      - name: produced_water_in_field_million_sm3
+        description: "Produced water in the field in million standard cubic metres (Sm3)."
+      - name: produced_water_in_field_million_bbl
+        description: "Produced water in the field in million barrels (converted from Sm3 at 6.2898 bbl/Sm3)."
+      - name: npdid_field
+        description: "SODIR id for the field. Foreign key joining to gold_wellbore on npdid_field."
